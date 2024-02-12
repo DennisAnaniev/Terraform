@@ -18,6 +18,7 @@ resource "aws_instance" "lesson_03" {
   instance_type = "t2.micro"
 
   tags = {
-    Name = "Lesson-03-AWS-Instance"
+    Name = "Simple micro instance"
   }
 }
+
