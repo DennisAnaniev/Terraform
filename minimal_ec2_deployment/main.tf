@@ -1,32 +1,22 @@
-terraform {
-  required_providers {
-    aws = {
-      source  = "hashicorp/aws"
-      version = "~> 4.16"
-    }
-  }
-  required_version = ">= 1.2.0"
-}
-
-provider "aws" {
-  region = "us-east-2"
-}
-resource "aws_default_vpc" "default" {
-    tags = {
-        Name = "Default VPC"
-    }
-}
-resource "aws_instance" "simple_instance" {
-  ami           = "ami-0c7c4e3c6b4941f0f"
+resource "aws_instance" "simple_ubuntu" {
+  ami           = "ami-097a2df4ac947655f"
   instance_type = "t2.micro"
+  key_name      = "aws_key"
   vpc_security_group_ids = [
     aws_security_group.sg_ssh.id,
-    aws_security_group.sg_https.id
+    aws_security_group.sg_https.id,
+    aws_security_group.sg_http.id
   ]
 
+
   tags = {
-    Name = "Simple micro instance"
+    Name = "simple_ubuntu"
   }
+}
+
+resource "aws_key_pair" "deployer" {
+  key_name   = "aws_key"
+  public_key = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIBtz259XyA92d7/6EJmubV+7xaQyNrUnSFKG2wHejXUg Denis@DESKTOP-Q6EFI2S"
 }
 
 resource "aws_security_group" "sg_ssh" {
@@ -51,6 +41,22 @@ resource "aws_security_group" "sg_https" {
     protocol    = "tcp"
     from_port   = 443
     to_port     = 443
+  }
+
+  egress {
+    cidr_blocks = ["0.0.0.0/0"]
+    protocol    = "-1"
+    from_port   = 0
+    to_port     = 0
+  }
+}
+
+resource "aws_security_group" "sg_http" {
+  ingress {
+    cidr_blocks = ["0.0.0.0/0"]
+    protocol    = "tcp"
+    from_port   = 80
+    to_port     = 80
   }
 
   egress {
