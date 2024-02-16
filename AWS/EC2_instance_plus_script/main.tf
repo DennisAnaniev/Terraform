@@ -7,7 +7,7 @@ resource "aws_instance" "simple_ubuntu" {
     aws_security_group.sg_https.id,
     aws_security_group.sg_http.id
   ]
-
+  user_data = file("scripts/apache-mkdocs.yaml")
 
   tags = {
     Name = "simple_ubuntu"
@@ -16,7 +16,7 @@ resource "aws_instance" "simple_ubuntu" {
 
 resource "aws_key_pair" "deployer" {
   key_name   = "aws_key"
-  public_key = ""
+  public_key = "ssh-ed25519 AAAA"
 }
 
 resource "aws_security_group" "sg_ssh" {
