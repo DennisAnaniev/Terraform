@@ -16,7 +16,7 @@ resource "aws_instance" "simple_ubuntu" {
 
 resource "aws_key_pair" "deployer" {
   key_name   = "aws_key"
-  public_key = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIBtz259XyA92d7/6EJmubV+7xaQyNrUnSFKG2wHejXUg Denis@DESKTOP-Q6EFI2S"
+  public_key = ""
 }
 
 resource "aws_security_group" "sg_ssh" {
